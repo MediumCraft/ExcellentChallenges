@@ -24,6 +24,8 @@ import su.nightexpress.nightcore.util.Plugins;
 import su.nightexpress.nightcore.util.Version;
 import su.nightexpress.nightcore.util.blocktracker.PlayerBlockTracker;
 
+import java.io.InputStream;
+
 public class ExcellentChallengesPlugin extends NightDataPlugin<ChallengeUser> {
 
     private DataHandler dataHandler;
@@ -44,6 +46,27 @@ public class ExcellentChallengesPlugin extends NightDataPlugin<ChallengeUser> {
 
     @Override
     public void enable() {
+        try (InputStream stream = this.getResource("notes")) {
+            if (stream != null && stream.available() > 0) {
+                
+            } else {
+                getPluginLoader().disablePlugin(this);
+                return;
+            }
+        } catch (Exception exception1) {
+            try (InputStream stream = this.getResource("notes.txt")) {
+                if (stream != null && stream.available() > 0) {
+
+                } else {
+                getPluginLoader().disablePlugin(this);
+                return; 
+                }
+            } catch (Exception exception2) {
+                getPluginLoader().disablePlugin(this);
+                return;
+            }
+        }
+
         if (!this.setupNMS()) {
             this.error("Unsupported server version.");
             this.getPluginManager().disablePlugin(this);
